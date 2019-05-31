@@ -16,12 +16,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
+
+def androidx_appcompat = '1.1.0-alpha05'
+def androidx_annotations = '1.0.0'
+def material = '1.1.0-alpha06'
+def constraintlayout = '2.0.0-beta1'
+def gson = '2.8.5'
+def gms_location = "16.0.0"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+
+    implementation "androidx.appcompat:appcompat:$androidx_appcompat"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
+    implementation "androidx.annotation:annotation:$androidx_annotations"
+    implementation "com.google.android.material:material:$material"
+
+    implementation "com.google.code.gson:gson:$gson"
+    implementation "com.google.android.gms:play-services-location:$gms_location"
+
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
