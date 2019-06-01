@@ -5,10 +5,10 @@ import androidx.annotation.Nullable;
 
 import io.openweather.domain.entities.LatLon;
 import io.openweather.domain.misc.UseCase;
-import io.openweather.domain.misc.observer.ObserverEmitter;
+import io.openweather.domain.misc.observer.ObserverConsumer;
 import io.openweather.domain.misc.observer.dispatchers.ObserverDispatcherAdapter;
 
-public class SubscribeChangingLocationUseCase implements UseCase<ObserverEmitter<LatLon>> {
+public class SubscribeChangingLocationUseCase implements UseCase<ObserverConsumer<LatLon>> {
 
     private final LocationProvider locationProvider;
 
@@ -17,7 +17,7 @@ public class SubscribeChangingLocationUseCase implements UseCase<ObserverEmitter
     }
 
     @Override
-    public ObserverEmitter<LatLon> execute() {
+    public ObserverConsumer<LatLon> execute() {
         return locationProvider.observeLocation().connect(new FilterLocationDispatcher());
     }
 

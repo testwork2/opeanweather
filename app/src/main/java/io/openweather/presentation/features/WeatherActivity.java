@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.api.ResolvableApiException;
 
 import io.openweather.ServiceLocator;
+import io.openweather.domain.entities.Result;
+import io.openweather.domain.entities.Weather;
+import io.openweather.domain.misc.observer.ObserverSubscriber;
 import io.openweather.presentation.misc.PermissionHelper;
 
 public class WeatherActivity extends AppCompatActivity implements WeatherContract.View {
@@ -28,6 +31,20 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ServiceLocator.provideLocationRepository()
+                .getWeatherByCityName("Kiev")
+                .subscribe(new ObserverSubscriber<Result<Weather>>() {
+                    @Override
+                    public void onNext(@NonNull Result<Weather> next) {
+                        Log.d(TAG, "onNext() called with: next = [" + next + "]");
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Log.e(TAG, "onError() called with: throwable = [" + throwable + "]");
+                    }
+                });
 
     }
 

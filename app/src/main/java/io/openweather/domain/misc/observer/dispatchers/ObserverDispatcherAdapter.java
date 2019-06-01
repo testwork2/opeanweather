@@ -23,7 +23,12 @@ public abstract class ObserverDispatcherAdapter<T> implements ObserverDispatcher
     @Override
     public Disposable subscribe(@NonNull ObserverSubscriber<T> subscriber) {
         this.subscriber = subscriber;
-        subscribeActual(subscriber);
+        try {
+            subscribeActual(subscriber);
+        } catch (Throwable throwable) {
+            onError(throwable);
+            dispose();
+        }
         return this;
     }
 

@@ -1,10 +1,10 @@
 package io.openweather.domain.features.location;
 
 import io.openweather.domain.misc.UseCase;
-import io.openweather.domain.misc.observer.ObserverEmitter;
+import io.openweather.domain.misc.observer.ObserverConsumer;
 import io.openweather.domain.misc.observer.dispatchers.SingleDispatcher;
 
-public class CheckSettingsLocationUseCase implements UseCase<ObserverEmitter<Object>> {
+public class CheckSettingsLocationUseCase implements UseCase<ObserverConsumer<Object>> {
 
     private final LocationProvider locationProvider;
 
@@ -13,7 +13,7 @@ public class CheckSettingsLocationUseCase implements UseCase<ObserverEmitter<Obj
     }
 
     @Override
-    public ObserverEmitter<Object> execute() {
+    public ObserverConsumer<Object> execute() {
         return locationProvider.checkSettings().connect(SingleDispatcher.create());
     }
 

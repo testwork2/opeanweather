@@ -2,7 +2,7 @@ package io.openweather.domain.misc.observer;
 
 import androidx.annotation.NonNull;
 
-public interface ObserverDispatcher<T> extends ObserverEmitter<T>, ObserverSubscriber<T> {
+public interface ObserverDispatcher<T> extends ObserverConsumer<T>, ObserverSubscriber<T> {
 
     void source(@NonNull ObserverDispatcher<T> source);
 
