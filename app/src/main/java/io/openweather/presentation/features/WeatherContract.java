@@ -1,28 +1,48 @@
 package io.openweather.presentation.features;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.common.api.ResolvableApiException;
+
+import io.openweather.domain.entities.Weather;
 
 public interface WeatherContract {
 
     interface View {
 
-        void onShowError(String message);
+        void onShowError(@Nullable String message);
 
         void onShowProgress(boolean isLoading);
 
-        void onShowLocationSettings(ResolvableApiException e);
+        void onShowLocationSettings(@NonNull ResolvableApiException e);
+
+        void onWeatherLoaded(@NonNull Weather weather);
+
+        void onStateChanged(InputState state);
+
+        void requestLocationWithPermission();
 
     }
 
     interface Presenter {
 
-        void attachView(View view);
+        void attachView(@NonNull View view);
 
         void detachView();
 
-        void requestLocation();
+        void loadWeather();
+
+        void requestLocationSettings();
 
         void observeLocationUpdates();
+
+        void onEditCityClick();
+
+        void onSaveCityClick(@Nullable CharSequence city);
+
+        void onLocationClick();
+
     }
 
 

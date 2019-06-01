@@ -1,5 +1,7 @@
 package io.openweather.domain.features.location;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -9,6 +11,8 @@ import io.openweather.domain.misc.observer.ObserverConsumer;
 import io.openweather.domain.misc.observer.dispatchers.ObserverDispatcherAdapter;
 
 public class SubscribeChangingLocationUseCase implements UseCase<ObserverConsumer<LatLon>> {
+
+    private static final String TAG = "SubscribeChangingLatLon";
 
     private final LocationProvider locationProvider;
 
@@ -31,6 +35,7 @@ public class SubscribeChangingLocationUseCase implements UseCase<ObserverConsume
 
         @Override
         public void onNext(@NonNull LatLon next) {
+            Log.d(TAG, "onNext() called with: next = [" + next + "]");
             if (subscriber == null) {
                 return;
             }

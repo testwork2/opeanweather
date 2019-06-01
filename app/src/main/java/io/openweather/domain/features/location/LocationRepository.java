@@ -9,6 +9,6 @@ public interface LocationRepository {
 
     ObserverConsumer<Result<Weather>> getWeatherByCityName(String city);
 
-    void getWeatherByPos(LatLon latLon);
+    ObserverConsumer<Result<Weather>> getWeatherByPos(LatLon latLon);
 
 }

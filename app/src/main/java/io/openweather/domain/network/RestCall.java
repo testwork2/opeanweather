@@ -4,10 +4,10 @@ import androidx.annotation.WorkerThread;
 
 import java.io.IOException;
 
-public interface RestCall<T> {
+public interface RestCall {
 
     @WorkerThread
-    T execute() throws IOException;
+    String execute() throws IOException;
 
     void cancel();
 

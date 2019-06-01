@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/city_input"
+        style="@style/Widget.Weather.City.Text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/cities" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/edit_city_button"
+        style="@style/Widget.Weather.City.Icon"
+        android:layout_marginStart="@dimen/city_icon_margin"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/city_input"
+        app:layout_constraintStart_toEndOf="@id/city_input"
+        app:layout_constraintTop_toTopOf="@id/city_input"
+        app:srcCompat="@drawable/ic_edit" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/save_city_button"
+        style="@style/Widget.Weather.City.Icon"
+        android:layout_marginStart="@dimen/city_icon_margin"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/city_input"
+        app:layout_constraintStart_toEndOf="@id/city_input"
+        app:layout_constraintTop_toTopOf="@id/city_input"
+        app:srcCompat="@drawable/ic_done" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/location_button"
+        style="@style/Widget.Weather.City.Icon"
+        android:layout_marginEnd="@dimen/city_icon_margin"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/city_input"
+        app:layout_constraintEnd_toStartOf="@+id/city_input"
+        app:layout_constraintTop_toTopOf="@+id/city_input"
+        app:srcCompat="@drawable/ic_my_location" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

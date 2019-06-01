@@ -1,6 +1,13 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">OpenWeather</string>
 
-    <string name="settingsChangeUnavailableMessage">Location settings are inadequate, and cannot be fixed here. Fix in Settings.</string>
+    <string name="settings_change_unavailable_message">Location settings are inadequate, and cannot be fixed here. Fix in Settings.</string>
+
+    <string name="date_updated">Last updated: <xliff:g example="01/20/2019 14:20" id="date">%1$tD %1$tR </xliff:g></string>
+    <string name="temperature"><xliff:g example="+4">%1$s</xliff:g>°</string>
+    <string name="pressure">Pressure: <xliff:g example="1018">%1$d</xliff:g> hpa</string>
+    <string name="humidity">Humidity: <xliff:g example="50">%1$d</xliff:g> %%</string>
+
+    <string name="unknown_error">Unknown exception</string>
 
 </resources>

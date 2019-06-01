@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import io.openweather.domain.network.RequestCancelledException;
 import io.openweather.domain.network.RestCall;
 import io.openweather.domain.network.RestClient;
 
@@ -18,8 +19,8 @@ public class DefaultRestClient implements RestClient {
 
     @Override
     @Nullable
-    public RestCall<String> call(String url) {
-        return new RestCall<String>() {
+    public RestCall call(String url) {
+        return new RestCall() {
 
             private volatile boolean isCancelled;
 
@@ -34,7 +35,7 @@ public class DefaultRestClient implements RestClient {
                         BufferedReader r = new BufferedReader(new InputStreamReader(in));
                         for (String line; (line = r.readLine()) != null; ) {
                             if (isCancelled) {
-                                return null;
+                                throw new RequestCancelledException();
                             }
                             result.append(line).append('\n');
                         }

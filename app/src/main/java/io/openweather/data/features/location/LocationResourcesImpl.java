@@ -19,6 +19,6 @@ public class LocationResourcesImpl implements LocationResources {
 
     @Override
     public String getSettingsChangeUnavailableMessage() {
-        return context.getString(R.string.settingsChangeUnavailableMessage);
+        return context.getString(R.string.settings_change_unavailable_message);
     }
 }

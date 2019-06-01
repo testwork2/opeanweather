@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import io.openweather.data.features.location.LocationProviderImpl;
 import io.openweather.data.features.location.LocationRepositoryImpl;
 import io.openweather.data.features.location.LocationResourcesImpl;
-import io.openweather.data.mappers.WeatherMapper;
+import io.openweather.data.mappers.WeatherFromResponseMapper;
 import io.openweather.data.network.DefaultRestClient;
 import io.openweather.data.network.GsonConverterImpl;
 import io.openweather.data.network.ServerConfigImpl;
@@ -66,8 +66,8 @@ public class ServiceLocator {
         return new LocationProviderImpl(INSTANCE.application, provideLocationResources());
     }
 
-    public static WeatherMapper provideWeatherMapper() {
-        return new WeatherMapper();
+    public static WeatherFromResponseMapper provideWeatherMapper() {
+        return new WeatherFromResponseMapper();
     }
 
     public static LocationRepository provideLocationRepository() {
@@ -101,8 +101,8 @@ public class ServiceLocator {
     public static WeatherContract.Presenter providePresenter() {
         return new WeatherPresenter(
                 provideCheckSettingsLocationUseCase(),
-                provideSubscribeLocationUseCase()
-        );
+                provideSubscribeLocationUseCase(),
+                provideLocationRepository());
     }
 
     //endregion
