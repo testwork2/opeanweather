@@ -9,5 +9,8 @@
     <string name="humidity">Humidity: <xliff:g example="50">%1$d</xliff:g> %%</string>
 
     <string name="unknown_error">Unknown exception</string>
+    <string name="invalid_place_name">Please enter a valid city</string>
+    <string name="unknown_place">Can\'t found the weather for this city</string>
+    <string name="unknown_host_exception">Please check the internet connection</string>
 
 </resources>

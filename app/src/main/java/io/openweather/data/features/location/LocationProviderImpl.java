@@ -21,9 +21,9 @@ import com.google.android.gms.location.SettingsClient;
 import java.util.concurrent.TimeUnit;
 
 import io.openweather.domain.entities.LatLon;
+import io.openweather.domain.features.Resources;
 import io.openweather.domain.features.location.LocationException;
 import io.openweather.domain.features.location.LocationProvider;
-import io.openweather.domain.features.location.LocationResources;
 import io.openweather.domain.misc.observer.ObserverDispatcher;
 import io.openweather.domain.misc.observer.ObserverSubscriber;
 import io.openweather.domain.misc.observer.dispatchers.ObserverDispatcherAdapter;
@@ -31,15 +31,15 @@ import io.openweather.domain.misc.observer.dispatchers.ObserverDispatcherAdapter
 public class LocationProviderImpl implements LocationProvider {
 
     private static final String TAG = "LocationProviderImpl";
-    private static final int UPDATE_INTERVAL_IN_MINUTES = 1;
+    private static final int UPDATE_INTERVAL_IN_MINUTES = 2;
     private static final int FASTEST_UPDATE_INTERVAL_IN_MINUTES = UPDATE_INTERVAL_IN_MINUTES / 2;
 
     @NonNull
     private final Context context;
     @NonNull
-    private final LocationResources resources;
+    private final Resources resources;
 
-    public LocationProviderImpl(@NonNull Context context, @NonNull LocationResources resources) {
+    public LocationProviderImpl(@NonNull Context context, @NonNull Resources resources) {
         this.context = context.getApplicationContext();
         this.resources = resources;
     }
@@ -64,7 +64,7 @@ public class LocationProviderImpl implements LocationProvider {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(TimeUnit.MINUTES.toMillis(UPDATE_INTERVAL_IN_MINUTES));
         locationRequest.setFastestInterval(TimeUnit.MINUTES.toMillis(FASTEST_UPDATE_INTERVAL_IN_MINUTES));
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return locationRequest;
     }
 
@@ -81,6 +81,7 @@ public class LocationProviderImpl implements LocationProvider {
 
         @Override
         public void dispose() {
+            super.dispose();
             client.removeLocationUpdates(locationCallback);
         }
 

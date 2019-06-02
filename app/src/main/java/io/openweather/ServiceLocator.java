@@ -4,18 +4,21 @@ import android.app.Application;
 
 import com.google.gson.Gson;
 
+import io.openweather.data.features.ResourcesImpl;
 import io.openweather.data.features.location.LocationProviderImpl;
-import io.openweather.data.features.location.LocationRepositoryImpl;
-import io.openweather.data.features.location.LocationResourcesImpl;
+import io.openweather.data.features.weather.WeatherDaoImpl;
+import io.openweather.data.features.weather.WeatherRepositoryImpl;
 import io.openweather.data.mappers.WeatherFromResponseMapper;
 import io.openweather.data.network.DefaultRestClient;
 import io.openweather.data.network.GsonConverterImpl;
 import io.openweather.data.network.ServerConfigImpl;
-import io.openweather.domain.features.location.CheckSettingsLocationUseCase;
+import io.openweather.domain.features.Resources;
 import io.openweather.domain.features.location.LocationProvider;
-import io.openweather.domain.features.location.LocationRepository;
-import io.openweather.domain.features.location.LocationResources;
-import io.openweather.domain.features.location.SubscribeChangingLocationUseCase;
+import io.openweather.domain.features.weather.CheckSettingsLocationUseCase;
+import io.openweather.domain.features.weather.SubscribeChangingLocationUseCase;
+import io.openweather.domain.features.weather.ValidatePlaceNameUseCase;
+import io.openweather.domain.features.weather.WeatherDao;
+import io.openweather.domain.features.weather.WeatherRepository;
 import io.openweather.domain.misc.async.TaskExecutor;
 import io.openweather.domain.misc.async.TaskExecutorImpl;
 import io.openweather.domain.network.Converter;
@@ -58,23 +61,28 @@ public class ServiceLocator {
     }
 
 
-    public static LocationResources provideLocationResources() {
-        return new LocationResourcesImpl(INSTANCE.application);
+    public static Resources provideResources() {
+        return new ResourcesImpl(INSTANCE.application);
     }
 
     public static LocationProvider provideLocationProvider() {
-        return new LocationProviderImpl(INSTANCE.application, provideLocationResources());
+        return new LocationProviderImpl(INSTANCE.application, provideResources());
     }
 
     public static WeatherFromResponseMapper provideWeatherMapper() {
         return new WeatherFromResponseMapper();
     }
 
-    public static LocationRepository provideLocationRepository() {
-        return new LocationRepositoryImpl(
+    public static WeatherDao provideWeatherDao() {
+        return new WeatherDaoImpl(INSTANCE.application);
+    }
+
+    public static WeatherRepository provideLocationRepository() {
+        return new WeatherRepositoryImpl(
                 provideTaskExecutor(),
                 provideServerConfig(),
                 provideRestClient(),
+                provideWeatherDao(),
                 provideWeatherMapper(),
                 provideConverter()
         );
@@ -93,6 +101,10 @@ public class ServiceLocator {
         return new SubscribeChangingLocationUseCase(provideLocationProvider());
     }
 
+    public static ValidatePlaceNameUseCase provideValidatePlaceNameUseCase() {
+        return new ValidatePlaceNameUseCase(provideResources());
+    }
+
     //endregion
 
 
@@ -102,7 +114,9 @@ public class ServiceLocator {
         return new WeatherPresenter(
                 provideCheckSettingsLocationUseCase(),
                 provideSubscribeLocationUseCase(),
-                provideLocationRepository());
+                provideLocationRepository(),
+                provideValidatePlaceNameUseCase(),
+                provideResources());
     }
 
     //endregion

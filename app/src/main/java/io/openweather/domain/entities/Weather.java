@@ -1,8 +1,8 @@
 package io.openweather.domain.entities;
 
-public class Weather {
+public final class Weather {
 
-    private String city;
+    private String place;
     private String description;
     private long updatedDate;
     private int groupId;
@@ -10,8 +10,8 @@ public class Weather {
     private int pressure;
     private int humidity;
 
-    public Weather(String city, String description, long updatedDate, int groupId, int temp, int pressure, int humidity) {
-        this.city = city;
+    public Weather(String place, String description, long updatedDate, int groupId, int temp, int pressure, int humidity) {
+        this.place = place;
         this.description = description;
         this.updatedDate = updatedDate;
         this.groupId = groupId;
@@ -32,14 +32,14 @@ public class Weather {
         if (temp != weather.temp) return false;
         if (pressure != weather.pressure) return false;
         if (humidity != weather.humidity) return false;
-        if (city != null ? !city.equals(weather.city) : weather.city != null) return false;
+        if (place != null ? !place.equals(weather.place) : weather.place != null) return false;
         return description != null ? description.equals(weather.description) : weather.description == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = city != null ? city.hashCode() : 0;
+        int result = place != null ? place.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (int) (updatedDate ^ (updatedDate >>> 32));
         result = 31 * result + groupId;
@@ -52,7 +52,7 @@ public class Weather {
     @Override
     public String toString() {
         return "Weather{" +
-                "city='" + city + '\'' +
+                "place='" + place + '\'' +
                 ", description='" + description + '\'' +
                 ", updatedDate=" + updatedDate +
                 ", groupId=" + groupId +
@@ -62,8 +62,8 @@ public class Weather {
                 '}';
     }
 
-    public String getCity() {
-        return city;
+    public String getPlace() {
+        return place;
     }
 
     public String getDescription() {

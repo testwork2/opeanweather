@@ -11,7 +11,7 @@ public interface WeatherContract {
 
     interface View {
 
-        void onShowError(@Nullable String message);
+        void onShowError(@NonNull String message);
 
         void onShowProgress(boolean isLoading);
 
@@ -37,9 +37,9 @@ public interface WeatherContract {
 
         void observeLocationUpdates();
 
-        void onEditCityClick();
+        void onEditPlaceClick();
 
-        void onSaveCityClick(@Nullable CharSequence city);
+        void onSavePlaceClick(@Nullable CharSequence place);
 
         void onLocationClick();
 

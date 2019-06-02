@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,8 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.transition.Fade;
+import androidx.transition.Slide;
 import androidx.transition.TransitionManager;
+import androidx.transition.TransitionSet;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 
@@ -40,8 +45,12 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     private final WeatherContract.Presenter presenter = ServiceLocator.providePresenter();
 
     private View progressBar;
-    private EditText cityInput;
+    private EditText placeInput;
     private ConstraintLayout rootLayout;
+    private Group contentGroup;
+    private View locationButton;
+    private View editButton;
+    private View saveButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,20 +64,23 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         presenter.loadWeather();
 
         rootLayout = findViewById(R.id.root_layout);
-        rootLayout.loadLayoutDescription(R.xml.weather_states);
-        cityInput = findViewById(R.id.city_input);
+        contentGroup = findViewById(R.id.contentGroup);
+        placeInput = findViewById(R.id.place_input);
+        locationButton = findViewById(R.id.location_button);
+        editButton = findViewById(R.id.edit_place_button);
+        saveButton = findViewById(R.id.save_place_button);
 
-        cityInput.setOnEditorActionListener((v, actionId, event) -> {
+        placeInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                presenter.onEditCityClick();
+                presenter.onSavePlaceClick(placeInput.getText());
                 return true;
             }
             return false;
         });
-        findViewById(R.id.location_button).setOnClickListener((v) -> presenter.onLocationClick());
-        findViewById(R.id.edit_city_button).setOnClickListener((v) -> presenter.onEditCityClick());
-        findViewById(R.id.save_city_button).setOnClickListener((v) ->
-                presenter.onSaveCityClick(cityInput.getText()));
+
+        locationButton.setOnClickListener((v) -> presenter.onLocationClick());
+        editButton.setOnClickListener((v) -> presenter.onEditPlaceClick());
+        saveButton.setOnClickListener((v) -> presenter.onSavePlaceClick(placeInput.getText()));
     }
 
     @Override
@@ -104,12 +116,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
 
     @Override
-    public void onShowError(String message) {
-        Toast.makeText(
-                this,
-                message == null ? getString(R.string.unknown_error) : message,
-                Toast.LENGTH_SHORT
-        ).show();
+    public void onShowError(@NonNull String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -128,38 +136,63 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
     @Override
     public void onWeatherLoaded(@NonNull Weather weather) {
-        TextView cityTextView = findViewById(R.id.city_input);
+        animateContent();
+        TextView placeTextView = findViewById(R.id.place_input);
         TextView descriptionTextView = findViewById(R.id.description_text_view);
         ImageView iconImageView = findViewById(R.id.icon_image_view);
-        TextView tempTextView = findViewById(R.id.temp_text_view);
+        TextSwitcher tempTextView = findViewById(R.id.temp_text_view);
         TextView pressureTextView = findViewById(R.id.pressure_text_view);
         TextView humidityTextView = findViewById(R.id.humidity_text_view);
         TextView dateTextView = findViewById(R.id.date_text_view);
 
-        cityTextView.setText(weather.getCity());
+        placeTextView.setText(weather.getPlace());
         descriptionTextView.setText(weather.getDescription());
         iconImageView.setImageResource(new WeatherIconParser().parseGroupId(weather.getGroupId()));
-        tempTextView.setText(getString(R.string.temperature, weather.getTempWithSign()));
         pressureTextView.setText(getString(R.string.pressure, weather.getPressure()));
         humidityTextView.setText(getString(R.string.humidity, weather.getHumidity()));
         dateTextView.setText(getString(R.string.date_updated, weather.getUpdatedDate()));
+
+        //prevent animations if the temperature was not changed
+        if (tempTextView.getTag() == null || weather.getTemp() != (int) tempTextView.getTag()) {
+            tempTextView.setTag(weather.getTemp());
+            tempTextView.setText(getString(R.string.temperature, weather.getTempWithSign()));
+        }
     }
 
     @Override
     public void onStateChanged(InputState state) {
+        Fade transition = new Fade();
+        transition.addTarget(locationButton);
+        transition.addTarget(saveButton);
+        transition.addTarget(editButton);
+        TransitionManager.beginDelayedTransition(rootLayout, transition);
         switch (state) {
-            case DISABLE:
-                cityInput.setEnabled(false);
+            case DISABLED:
+                locationButton.setVisibility(View.GONE);
+                saveButton.setVisibility(View.GONE);
+                editButton.setVisibility(View.GONE);
+                placeInput.setEnabled(false);
+                hideKeyboard(placeInput);
+                break;
+            case DEFAULT:
+                locationButton.setVisibility(View.GONE);
+                saveButton.setVisibility(View.GONE);
+                editButton.setVisibility(View.VISIBLE);
+                placeInput.setEnabled(false);
+                hideKeyboard(placeInput);
                 break;
             case EDITABLE:
-                cityInput.setEnabled(true);
-                cityInput.requestFocus();
-                cityInput.setSelection(Math.max(0, cityInput.getText().length()));
-                showKeyboard(cityInput);
+                locationButton.setTranslationX(-getResources().getDimensionPixelSize(R.dimen.place_icon_size));
+                locationButton.animate().translationX(0).start();
+                locationButton.setVisibility(View.VISIBLE);
+                saveButton.setVisibility(View.VISIBLE);
+                editButton.setVisibility(View.GONE);
+                placeInput.setEnabled(true);
+                placeInput.requestFocus();
+                placeInput.setSelection(Math.max(0, placeInput.getText().length()));
+                showKeyboard(placeInput);
                 break;
         }
-        TransitionManager.beginDelayedTransition(rootLayout, new Fade());
-        rootLayout.setState(state.getStateId(), 0, 0);
     }
 
     @Override
@@ -177,4 +210,23 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
             imm.toggleSoftInputFromWindow(view.getWindowToken(), 0, 0);
         }
     }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void animateContent() {
+        if (contentGroup.getVisibility() == View.GONE) {
+            TransitionSet set = new TransitionSet();
+            set.addTransition(new Slide(Gravity.BOTTOM));
+            set.addTransition(new Fade());
+            set.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
+            TransitionManager.beginDelayedTransition(rootLayout, set);
+            contentGroup.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

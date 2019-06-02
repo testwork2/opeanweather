@@ -9,11 +9,9 @@ import io.openweather.domain.misc.observer.ObserverSubscriber;
 
 public abstract class ObserverDispatcherAdapter<T> implements ObserverDispatcher<T> {
 
-    @Nullable
-    protected ObserverSubscriber<T> subscriber;
+    @Nullable protected ObserverSubscriber<T> subscriber;
 
-    @Nullable
-    protected ObserverDispatcher<T> source;
+    @Nullable private ObserverDispatcher<T> source;
 
     @Override
     public void source(@NonNull ObserverDispatcher<T> source) {

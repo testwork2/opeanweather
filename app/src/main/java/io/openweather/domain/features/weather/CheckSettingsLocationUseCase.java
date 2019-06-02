@@ -1,5 +1,6 @@
-package io.openweather.domain.features.location;
+package io.openweather.domain.features.weather;
 
+import io.openweather.domain.features.location.LocationProvider;
 import io.openweather.domain.misc.UseCase;
 import io.openweather.domain.misc.observer.ObserverConsumer;
 import io.openweather.domain.misc.observer.dispatchers.SingleDispatcher;

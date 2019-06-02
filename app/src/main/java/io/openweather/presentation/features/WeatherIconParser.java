@@ -7,7 +7,7 @@ import io.openweather.R;
 class WeatherIconParser {
 
     /**
-     * Find icon by group id ("https://openweathermap.org/weather-conditions#")
+     * Find a icon by group id ("https://openweathermap.org/weather-conditions#")
      *
      * @return drawable res id
      */

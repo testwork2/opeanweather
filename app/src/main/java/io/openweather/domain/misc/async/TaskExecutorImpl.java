@@ -19,9 +19,9 @@ public class TaskExecutorImpl implements TaskExecutor {
 
     private static volatile TaskExecutorImpl sInstance;
     @NonNull
-    private static final Executor sMainThreadExecutor = command -> getInstance().postToMainThread(command);
+    private static final Executor mainThreadExecutor = command -> getInstance().postToMainThread(command);
     @NonNull
-    private static final Executor sIOThreadExecutor = command -> getInstance().executeOnIO(command);
+    private static final Executor ioThreadExecutor = command -> getInstance().executeOnIO(command);
 
     private final Object lock = new Object();
 
@@ -64,15 +64,14 @@ public class TaskExecutorImpl implements TaskExecutor {
     @Override
     @NonNull
     public Executor mainExecutor() {
-        return sMainThreadExecutor;
+        return mainThreadExecutor;
     }
 
     @Override
     @NonNull
     public Executor ioExecutor() {
-        return sIOThreadExecutor;
+        return ioThreadExecutor;
     }
-
 
     private void executeOnIO(Runnable runnable) {
         io.execute(runnable);

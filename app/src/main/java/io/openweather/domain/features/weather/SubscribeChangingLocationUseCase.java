@@ -1,4 +1,4 @@
-package io.openweather.domain.features.location;
+package io.openweather.domain.features.weather;
 
 import android.util.Log;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import io.openweather.domain.entities.LatLon;
+import io.openweather.domain.features.location.LocationProvider;
 import io.openweather.domain.misc.UseCase;
 import io.openweather.domain.misc.observer.ObserverConsumer;
 import io.openweather.domain.misc.observer.dispatchers.ObserverDispatcherAdapter;
@@ -39,7 +40,6 @@ public class SubscribeChangingLocationUseCase implements UseCase<ObserverConsume
             if (subscriber == null) {
                 return;
             }
-
             if (previousPos == null || (!next.equals(previousPos) && isOutOfRadius(previousPos, next))) {
                 subscriber.onNext(next);
             }

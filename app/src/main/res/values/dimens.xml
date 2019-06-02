@@ -3,9 +3,10 @@
 
     <dimen name="spacing">16dp</dimen>
 
-    <dimen name="city_margin_top">48dp</dimen>
-    <dimen name="city_icon_margin">4dp</dimen>
-    <dimen name="city_icon_padding">4dp</dimen>
+    <dimen name="place_margin_top">48dp</dimen>
+    <dimen name="place_icon_margin">4dp</dimen>
+    <dimen name="place_icon_padding">4dp</dimen>
+    <dimen name="place_icon_size">32dp</dimen>
     <dimen name="description_margin_top">2dp</dimen>
     <dimen name="date_margin_top">2dp</dimen>
     <dimen name="weather_icon_size">72dp</dimen>
@@ -13,5 +14,6 @@
     <dimen name="pressure_margin_top">24dp</dimen>
 
     <dimen name="progress_bar_margin">8dp</dimen>
+    <dimen name="progress_bar_gone_margin">56dp</dimen>
 
 </resources>

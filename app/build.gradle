@@ -8,7 +8,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -20,11 +19,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
 }
 
 def androidx_appcompat = '1.1.0-alpha05'
 def androidx_annotations = '1.0.0'
-def material = '1.1.0-alpha06'
+def material = '1.1.0-alpha07'
 def constraintlayout = '2.0.0-beta1'
 def gson = '2.8.5'
 def gms_location = "16.0.0"
@@ -41,6 +46,5 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$gms_location"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'org.mockito:mockito-core:2.23.0'
 }

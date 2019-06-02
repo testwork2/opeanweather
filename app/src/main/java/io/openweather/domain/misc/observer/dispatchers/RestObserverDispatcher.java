@@ -9,6 +9,7 @@ import io.openweather.domain.misc.observer.ObserverSubscriber;
 import io.openweather.domain.network.RequestCancelledException;
 import io.openweather.domain.network.RestCall;
 
+@SuppressWarnings("WeakerAccess")
 public class RestObserverDispatcher<T> extends ObserverDispatcherAdapter<T> {
 
     private final RestCall restCall;
@@ -31,15 +32,16 @@ public class RestObserverDispatcher<T> extends ObserverDispatcherAdapter<T> {
     protected void subscribeActual(@NonNull ObserverSubscriber<T> subscriber) {
         fetchExecutor.execute(() -> {
             try {
-                T next = mapperFunction.apply(restCall.execute());
-                notifyExecutor.execute(() -> onNext(next));
+                T result = mapperFunction.apply(restCall.execute());
+                handleResult(result);
             } catch (RequestCancelledException cancelled) {
                 //ignore
             } catch (Throwable throwable) {
-                onError(throwable);
+                handleError(throwable);
             }
         });
     }
+
 
     @Override
     public void dispose() {
@@ -47,5 +49,13 @@ public class RestObserverDispatcher<T> extends ObserverDispatcherAdapter<T> {
         if (restCall != null) {
             restCall.cancel();
         }
+    }
+
+    protected void handleResult(T result) {
+        notifyExecutor.execute(() -> onNext(result));
+    }
+
+    protected void handleError(Throwable throwable) {
+        notifyExecutor.execute(() -> onError(throwable));
     }
 }

@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import io.openweather.domain.network.HttpResponseException;
 import io.openweather.domain.network.RequestCancelledException;
 import io.openweather.domain.network.RestCall;
 import io.openweather.domain.network.RestClient;
@@ -39,6 +40,13 @@ public class DefaultRestClient implements RestClient {
                             }
                             result.append(line).append('\n');
                         }
+                    }
+                } catch (IOException exception) {
+                    int responseCode = urlConnection.getResponseCode();
+                    if (responseCode > 0) {
+                        throw new HttpResponseException(responseCode, exception);
+                    } else {
+                        throw exception;
                     }
                 } finally {
                     urlConnection.disconnect();
